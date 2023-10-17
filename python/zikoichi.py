@@ -5,6 +5,9 @@ import matplotlib.image as mpimg
 # フィールド写真の読み込み
 field_img = mpimg.imread('field.png')
 
+# フィールド写真を水平反転
+field_img = field_img[:, ::-1]
+
 # プロット用のリスト
 x_positions = []
 y_positions = []
