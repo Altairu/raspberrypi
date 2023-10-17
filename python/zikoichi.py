@@ -7,7 +7,7 @@ import numpy as np
 field_img = mpimg.imread('field.png')
 
 # シリアル通信の設定
-ser = serial.Serial('/dev/ttyACM4', 115200)
+ser = serial.Serial('/dev/ttyACM3', 115200)
 
 # フィールドの寸法
 field_width = 3462  # フィールドの幅 (mm)
@@ -25,6 +25,8 @@ arrow = plt.arrow(0, 0, 0, 0, head_width=50, head_length=100, fc='g', ec='g')
 plt.xlim(0, field_width)
 plt.ylim(0, field_height)
 
+first_data_received = False
+
 while True:
     data = ser.readline().decode().strip()
     if data.startswith("(") and data.endswith(")"):
@@ -32,8 +34,8 @@ while True:
         y, x, theta = map(int, data.split(", "))  # y を縦軸、x を横軸、theta を角度として受信
 
         # ロボットの座標データをフィールドの寸法に合わせて変換
-        x = x * field_width / img_width
-        y = y * field_height / img_height
+        x = x 
+        y = y 
 
         # ロボットの向きを示す矢印を更新
         arrow.remove()
@@ -41,6 +43,9 @@ while True:
                           head_width=50, head_length=100, fc='g', ec='g')
 
         plt.pause(0.01)
+
+        if not first_data_received:
+            first_data_received = True
 
 # グラフを閉じる
 plt.close()
