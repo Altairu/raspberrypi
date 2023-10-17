@@ -5,9 +5,6 @@ import matplotlib.image as mpimg
 # フィールド写真の読み込み
 field_img = mpimg.imread('field.png')
 
-# フィールド写真を水平反転
-field_img = field_img[:, ::-1]
-
 # プロット用のリスト
 x_positions = []
 y_positions = []
@@ -20,14 +17,14 @@ field_width = 7000  # フィールドの幅 (mm)
 field_height = 3462  # フィールドの高さ (mm)
 
 # 画像の表示
-plt.imshow(field_img, extent=[0, field_width, 0, field_height])
+plt.imshow(field_img, extent=[0, field_height, 0, field_width])
 
 while True:
     data = ser.readline().decode().strip()
     if data.startswith("(") and data.endswith(")"):
         data = data[1:-1]
-        x, y, _ = map(int, data.split(", "))
-        
+        y, x, _ = map(int, data.split(", "))  # y を縦軸、x を横軸として受信
+
         # ロボットの座標データをフィールドの寸法に合わせて変換
         x = x * field_width / 637
         y = y * field_height / 1267
@@ -36,7 +33,7 @@ while True:
         y_positions.append(y)
 
         # プロットの更新
-        plt.scatter(x_positions, y_positions, c='r', marker='o')
+        plt.scatter(y_positions, x_positions, c='r', marker='o')
         plt.pause(0.01)
 
 plt.show()
